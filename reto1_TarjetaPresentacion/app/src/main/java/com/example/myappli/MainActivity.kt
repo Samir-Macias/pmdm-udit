@@ -11,11 +11,19 @@ import java.net.URLEncoder
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +53,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -89,6 +99,72 @@ fun TarjetaPresentacionWrapper() {
 }
 
 @Composable
+fun AnimatedBackground(isDarkMode: Boolean) {
+    val infiniteTransition = rememberInfiniteTransition(label = "BackgroundAnimation")
+
+    val pulse1 by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 8000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "Pulse1"
+    )
+
+    val pulse2 by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 10000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "Pulse2"
+    )
+
+    val glow1 = if (isDarkMode) Color(0x336366F1) else Color(0x3338BDF8)
+    val glow2 = if (isDarkMode) Color(0x33A855F7) else Color(0x33F472B6)
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val width = size.width
+        val height = size.height
+
+        // Fondo base
+        drawRect(color = if (isDarkMode) Color(0xFF0F172A) else Color(0xFFF8FAFC))
+
+        // Orbe brillante 1 (Zona superior izquierda)
+        val x1 = width * (0.2f + 0.3f * pulse1)
+        val y1 = height * (0.2f + 0.2f * pulse2)
+        val radius1 = width * (0.5f + 0.1f * pulse1)
+
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(glow1, Color.Transparent),
+                center = Offset(x1, y1),
+                radius = radius1
+            ),
+            center = Offset(x1, y1),
+            radius = radius1
+        )
+
+        // Orbe brillante 2 (Zona inferior derecha)
+        val x2 = width * (0.8f - 0.3f * pulse2)
+        val y2 = height * (0.7f - 0.2f * pulse1)
+        val radius2 = width * (0.6f + 0.1f * pulse2)
+
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(glow2, Color.Transparent),
+                center = Offset(x2, y2),
+                radius = radius2
+            ),
+            center = Offset(x2, y2),
+            radius = radius2
+        )
+    }
+}
+
+@Composable
 fun TarjetaPresentacion(
     isDarkMode: Boolean,
     onDarkModeChange: (Boolean) -> Unit
@@ -98,101 +174,118 @@ fun TarjetaPresentacion(
     // Estado para controlar qué QR mostrar en el diálogo
     var qrDialogData by remember { mutableStateOf<QrData?>(null) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(26.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        // Interruptor Modo Oscuro / Claro
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = if (isDarkMode) "Modo Oscuro" else "Modo Claro",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Switch(
-                checked = isDarkMode,
-                onCheckedChange = onDarkModeChange
-            )
-        }
+        // Fondo animado sutil
+        AnimatedBackground(isDarkMode = isDarkMode)
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Imagen de perfil
-        Image(
-            painter = painterResource(id = R.drawable.foto_perfil),
-            contentDescription = "Foto de perfil de usuario",
+        // Contenido principal de la pantalla
+        Column(
             modifier = Modifier
-                .size(190.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop,
-            alignment = Alignment.TopCenter
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text(
-            text = "Samir Macias",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Text(
-            text = "Desarrollador FullStack",
-            fontSize = 18.sp,
-            color = MaterialTheme.colorScheme.secondary
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Botón Descargar CV (Local)
-        AnimatedButton(
-            text = "Descargar mi CV",
-            backgroundColor = MaterialTheme.colorScheme.primary,
-            onClick = {
-                abrirPdfLocal(
-                    context = context,
-                    rawResId = R.raw.cvsamirdev,
-                    nombreArchivo = "cvsamirdev.pdf"
+                .fillMaxSize()
+                .padding(horizontal = 26.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Interruptor Modo Oscuro / Claro en la parte SUPERIOR
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+            ) {
+                Text(
+                    text = if (isDarkMode) "Modo Oscuro" else "Modo Claro",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = isDarkMode,
+                    onCheckedChange = onDarkModeChange
                 )
             }
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            // Elementos de la tarjeta centrados verticalmente
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                // Imagen de perfil
+                Image(
+                    painter = painterResource(id = R.drawable.foto_perfil),
+                    contentDescription = "Foto de perfil de usuario",
+                    modifier = Modifier
+                        .size(180.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.TopCenter
+                )
 
-        // Botón LinkedIn (Abre QR)
-        AnimatedButton(
-            text = "Mi perfil de LinkedIn",
-            backgroundColor = Color(0xFF0A66C2),
-            onClick = {
-                qrDialogData = QrData(
-                    titulo = "LinkedIn",
-                    url = "https://www.linkedin.com/in/samirmacias"
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
+                    text = "Samir Macias",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Text(
+                    text = "Desarrollador FullStack",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+
+                Spacer(modifier = Modifier.height(28.dp))
+
+                // Botón Descargar CV (Local)
+                AnimatedButton(
+                    text = "Descargar mi CV",
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                        abrirPdfLocal(
+                            context = context,
+                            rawResId = R.raw.cvsamirdev,
+                            nombreArchivo = "cvsamirdev.pdf"
+                        )
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón LinkedIn (Abre QR)
+                AnimatedButton(
+                    text = "Mi perfil de LinkedIn",
+                    backgroundColor = Color(0xFF0A66C2),
+                    onClick = {
+                        qrDialogData = QrData(
+                            titulo = "LinkedIn",
+                            url = "https://www.linkedin.com/in/samirmacias"
+                        )
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón GitHub (Abre QR)
+                AnimatedButton(
+                    text = "Mi repositorio de GitHub",
+                    backgroundColor = Color(0xFF24292E),
+                    onClick = {
+                        qrDialogData = QrData(
+                            titulo = "GitHub",
+                            url = "https://github.com/Samir-Macias"
+                        )
+                    }
                 )
             }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón GitHub (Abre QR)
-        AnimatedButton(
-            text = "Mi repositorio de GitHub",
-            backgroundColor = Color(0xFF24292E),
-            onClick = {
-                qrDialogData = QrData(
-                    titulo = "GitHub",
-                    url = "https://github.com/Samir-Macias"
-                )
-            }
-        )
+        }
     }
 
     // Diálogo emergente con el código QR
