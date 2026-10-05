@@ -29,5 +29,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    data class Producto(
+        val nombre: String,
+        val precio: Double,
+        val imanResId: Int
+    )
+
+    val catalogoHamburguesas = listOf(
+        Producto("Hamburguesa Clásica", 9.99, R.drawable.burger_clasica),
+        Producto("Hamburguesa BBQ", 12.99, R.drawable.burger_bbq),
+        Producto("Hamburguesa Doble", 11.99, R.drawable.burger_doble),
+        Producto("Hamburguesa de Pollo", 10.99, R.drawable.burger_pollo),
+        Producto("Vegetariana", 13.99, R.drawable.burger_vegetariana),
+        Producto("Picante Jalapeño", 14.99, R.drawable.burger_picante),
+    )
+
 }
 
