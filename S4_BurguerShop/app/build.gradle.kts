@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myappli"
+    namespace = "com.example.burguer_shop"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.myappli"
+        applicationId = "com.example.burguer_shop"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
@@ -44,8 +44,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation("io.coil-kt:coil-compose:2.6.0")
-    implementation("com.google.zxing:core:3.5.3")
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
