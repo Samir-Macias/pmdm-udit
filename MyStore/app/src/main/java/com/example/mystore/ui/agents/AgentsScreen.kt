@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -80,8 +81,27 @@ fun AgentsScreen(
                 }
             }
             is AgentsUiState.Error -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Error: ${state.message}", color = MaterialTheme.colorScheme.error)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = "Error de conexión:\n${state.message}\n\n(Comprueba la conexión a Internet del emulador)",
+                            color = Color(0xFFFF4655),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { viewModel.fetchAgents() },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4655))
+                        ) {
+                            Text("REINTENTAR", fontWeight = FontWeight.Bold)
+                        }
+                    }
                 }
             }
             is AgentsUiState.Success -> {
