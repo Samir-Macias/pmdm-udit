@@ -12,9 +12,9 @@ Aplicación Android nativa desarrollada en **Kotlin** y **Jetpack Compose** que 
 
 ## 🖼️ Capturas de Pantalla
 
-| Pantalla de Inicio 🏠 | Listado de Agentes 🎭 | Detalle en Pop-up 📜 | Vista modo Tablet 📲
-| :---: | :---: | :---: | :---: |
-<img src="app/src/main/res/drawable/captura_home.png" width="200" alt="Pantalla de Inicio"/> | <img src="app/src/main/res/drawable/captura_agentes.png" width="200" alt="Listado de Agentes"/> | <img src="app/src/main/res/drawable/captura_popup.png" width="200" alt="Pop-up de Detalle"/> | <img src="app/src/main/res/drawable/captura_vistatablet.png" width="200" alt="Vista en modo Tablet"/>
+| Pantalla de Inicio 🏠 |                                      Listado de Agentes 🎭                                      |                                     Detalle en Pop-up 📜                                     | Vista modo Tablet 📲
+| :---: |:-----------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------:| :---: |
+<img src="app/src/main/res/drawable/captura_home.png" width="100" alt="Pantalla de Inicio"/> | <img src="app/src/main/res/drawable/captura_agentes.png" width="100" alt="Listado de Agentes"/> | <img src="app/src/main/res/drawable/captura_popup.png" width="100" alt="Pop-up de Detalle"/> | <img src="app/src/main/res/drawable/captura_vistatablet.png" width="100" alt="Vista en modo Tablet"/>
 
 ---
 
