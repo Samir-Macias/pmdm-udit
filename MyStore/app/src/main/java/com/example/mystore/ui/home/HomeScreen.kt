@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HomeScreen(
     onNavigateToAgents: () -> Unit,
+    onNavigateToStats: () -> Unit = {},
     onNavigateToMaps: () -> Unit = {},
     onNavigateToWeapons: () -> Unit = {}
 ) {
@@ -44,6 +45,11 @@ fun HomeScreen(
 
         // Botón Agentes
         MenuButton(text = "AGENTES / JUGADORES", onClick = onNavigateToAgents)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón Estadísticas
+        MenuButton(text = "ESTADÍSTICAS (RIOT ID)", onClick = onNavigateToStats)
 
         Spacer(modifier = Modifier.height(16.dp))
 

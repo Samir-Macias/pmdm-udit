@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_rule_card"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tvWhitelistPrefix"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/text_primary"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnEditWhitelist"
+        style="@style/Widget.AppBlocker.SecondaryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Editar" />
+
+    <Button
+        android:id="@+id/btnDeleteWhitelist"
+        style="@style/Widget.AppBlocker.DangerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="6dp"
+        android:text="Quitar" />
+</LinearLayout>

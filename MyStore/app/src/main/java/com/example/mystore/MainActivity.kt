@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mystore.ui.agents.AgentsScreen
 import com.example.mystore.ui.home.HomeScreen
+import com.example.mystore.ui.stats.StatsScreen
 import com.example.mystore.ui.theme.MyStoreTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,11 +32,17 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("home") {
                             HomeScreen(
-                                onNavigateToAgents = { navController.navigate("agents") }
+                                onNavigateToAgents = { navController.navigate("agents") },
+                                onNavigateToStats = { navController.navigate("stats") }
                             )
                         }
                         composable("agents") {
                             AgentsScreen(
+                                onBackPress = { navController.popBackStack() }
+                            )
+                        }
+                        composable("stats") {
+                            StatsScreen(
                                 onBackPress = { navController.popBackStack() }
                             )
                         }

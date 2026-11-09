@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HardwareInputStateStorage">
+    <option name="enabledDevices">
+      <map>
+        <entry key="$USER_HOME$/.android/avd/Pixel_10_Pro_XL.avd" value="1794263352945" />
+        <entry key="PhysicalDevice::serial=SK5X49GALJUCJB4X" value="1793215178484" />
+      </map>
+    </option>
+  </component>
+</project>
